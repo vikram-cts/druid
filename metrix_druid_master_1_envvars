@@ -1,0 +1,50 @@
+druid_host=vcause1fddev01h.nn000584.aws.bank-dns.com
+druid_emitter_logging_logLevel=info
+#druid_extensions_loadList=["druid-histogram", "druid-datasketches", "druid-lookups-cached-global", "postgresql-metadata-storage", "druid-kafka-indexing-service", "druid-basic-security", "druid-s3-extensions","druid-hdfs-storage"] 
+DRUID_EXTENSIONS_LOADLIST='["druid-histogram","druid-datasketches","druid-lookups-cached-global","postgresql-metadata-storage","druid-kafka-indexing-service","druid-basic-security","druid-s3-extensions","druid-hdfs-storage"]'
+druid_zk_service_host=vcause1fddev01h.nn000584.aws.bank-dns.com
+druid_metadata_storage_type=postgresql
+druid_metadata_storage_connector_connectURI=jdbc:postgresql://postgresqlusdruidglobal-db-aurorapsql.global-gl1g10emhi24.global.rds.amazonaws.com:5432/postgresqlusdruid 
+druid_metadata_storage_connector_user=druid
+druid_metadata_storage_connector_password=druidpostgressstagee007
+druid_auth_authenticator_MyBasicMetadataAuthenticator_initialAdminPassword=password1
+druid_auth_authenticator_MyBasicMetadataAuthenticator_initialInternalClientPassword=password2
+druid_indexer_storage_type=metadata
+# druid_server_http_defaultQueryTimeout=0
+druid_indexer_storage_recentlyFinishedThreshold=PT72H
+druid_coordinator_balancer_strategy=cachingCost
+#druid_storage_type=local
+#druid_storage_storageDirectory=/opt/data/segments
+#druid_indexer_logs_type=file
+#druid_indexer_logs_directory=/opt/data/indexing-logs 
+DRUID_LOG4J=<?xml version="1.0" encoding="UTF-8" ?><Configuration status="WARN"><Appenders><Console name="Console" target="SYSTEM_OUT"><PatternLayout pattern="%d{ISO8601} %p [%t] %C - %m%n"/></Console><Appenders><Loggers><Root level="info"><AppenderRef ref="console"/></Root><!-- Uncomment to enable logging of all HTTP requests<Logger name="org.apache.druid.jetty.RequestLog" additivity="false" level="INFO"><AppenderRef ref="Console"/></Logger>--></Loggers></Configuration>
+#
+# Authentication
+druid_auth_authenticatorChain=["MyBasicMetadataAuthenticator"]
+druid_auth_authenticator_MyBasicMetadataAuthenticator_type=basic
+druid_auth_authenticator_MyBasicMetadataAuthenticator_credentialsValidator_type=metadata
+druid_auth_authenticator_MyBasicMetadataAuthenticator_skipOnFailure=false
+druid_auth_authenticator_MyBasicMetadataAuthenticator_authorizerName=MyBasicMetadataAuthorizer
+#Escalator
+druid_escalator_type=basic
+druid_escalator_internalClientUsername=druid_system
+druid_escalator_internalClientPassword=password2
+druid_escalator_authorizerName=MyBasicMetadataAuthorizer
+druid_auth_authorizers=["MyBasicMetadataAuthorizer"]
+druid_auth_authorizer_MyBasicMetadataAuthorizer_type=basic
+druid_storage_type=s3
+druid_storage_bucket=491085383807-us-east-1-dev-druid-data
+druid_storage_useS3aSchema=true
+druid_storage_baseKey=druid/segments
+druid_s3_endpoint_url=https://s3.amazonaws.com/
+druid_indexer_logs_type=s3
+druid_indexer_logs_s3Bucket=491085383807-us-east-1-dev-druid-data
+druid_indexer_logs_s3Prefix=logs
+druid_s3_enablePathStyleAccess=true
+druid_s3_disableChunkedEncoding=true
+AWS_REGION=us-east-1
+druid_plaintextPort=8084
+##master node t3.2xlarge 8cpu 32GB
+DRUID_XMX=20g
+DRUID_XMS=20g
+DRUID_MAXDIRECTMEMORYSIZE=1g
