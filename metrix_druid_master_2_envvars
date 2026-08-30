@@ -1,0 +1,6 @@
+ZOO_MY_ID=1
+ZOO_SERVERS=server.1=0.0.0.0:2888:3888;2181
+# ALLOW_ANONYMOUS_LOGIN="yes"
+ZOO_ALLOW_ANONYMOUS_LOGIN=true # as of zookeeper:3.8, this variable is ignored in standalone mode.
+ZOO_STANDALONE_ENABLED=true
+ZOO_ADMINSERVER_ENABLED=true
