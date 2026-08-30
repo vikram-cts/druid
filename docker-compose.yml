@@ -1,0 +1,60 @@
+version: "3"
+
+volumes:
+  coordinator_var: {}
+
+services:
+  zookeeper:
+    container_name: zookeeperd
+    image: container-mirror.us.bank-dns.com/dockerhub/zookeeper:3.8.0
+    restart: always
+    hostname: zookeeperd
+    ports:
+      - 2181:2181
+      - 2888-3888:2888-3888
+      - 8080:8080
+    env_file:
+      - /opt/talech/config/metrix_druid_master_secrets
+      - ./metrix_druid_master_2_envvars
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: metrix
+        awslogs-stream: druid-master-1-dev-zookeeper-log
+        awslogs-multiline-pattern: "^([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})"
+
+    healthcheck:
+      test: ["CMD", "echo", "ruok", "|", "nc", "localhost", "2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  coordinator:
+    image: artifact-build-obc.us.bank-dns.com:5008/talech/druid-image:495aeb56
+    container_name: coordinator
+    restart: on-failure
+    user: "root"
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - 8084:8084 # Druid Coordinator+Overlord
+    command:
+      - coordinator
+    volumes:
+      - /opt/talech/data/metrix-db/druid:/opt/data
+      - /opt/talech/data/druid:/opt/druid/var
+      - /opt/talech/data/metrix/etl:/opt/workspace
+    env_file:
+      - /opt/talech/config/metrix_druid_master_secrets
+      - ./metrix_druid_master_1_envvars
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: metrix
+        awslogs-stream: druid-master-1-dev-coordinator-log
+        awslogs-multiline-pattern: "^([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})"
+
+networks:
+  internal-docker-net:
+    driver: bridge
